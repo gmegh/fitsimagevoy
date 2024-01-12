@@ -1,9 +1,14 @@
+// Description: This is the main file of the extension. 
+// It contains the code to activate and deactivate the extension, 
+// and to register the custom editor provider.
+
+// Import the relevant modules
 import * as vscode from 'vscode';
 import * as crypto from 'crypto';
 import { spawn } from 'child_process';
 const osvar = process.platform;
 const path = require("path");
-const requirements = path.join(__dirname, "../requirements.txt");
+const requirements = path.join(__dirname, ".dist/python/requirements.txt");
 
 // Implement the CustomTextEditorProvider interface
 class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
@@ -14,11 +19,8 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         this.extensionUri = extensionUri;
     }
 
-    private readonly webviews = new WebviewCollection();
-
     // Implement the necessary methods (open, resolve, etc.)
     openCustomDocument(uri: vscode.Uri, openContext: vscode.CustomDocumentOpenContext, token: vscode.CancellationToken): vscode.CustomDocument {
-        // Check if a document is already open for this URI
         // Check if there are existing webviews for the URI
         let existingDocument = this.openDocuments.get(uri.fsPath);
         if (existingDocument) {
@@ -33,7 +35,17 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         return newDocument;
     }
 
+    // Implement the necessary methods (open, resolve, etc.)
     setWebviewForDocument(document: CustomDocument, webviewPanel: vscode.WebviewPanel): void {
+        /**
+         * This function updates the webview panel with the new document
+         * 
+         * @param document The document to be displayed in the webview
+         * @param webviewPanel The webview panel to be updated
+         * 
+         * @returns void
+         */
+
         // Send a message to the webview to update the header info
         const documentDataJson = JSON.stringify({
             file: document.file,
@@ -41,7 +53,7 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
             options: document.options,
         });
 
-        // Use the serialized data in the webview's HTML
+        // Get the path to the script and style files
         const scriptPath = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'src/main.js'));
         const stylePath = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'src/style.css'));
         const webviewUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'dist/webview.js'));
@@ -49,10 +61,12 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         const kipacLogoUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'assets/KIPAC_stack.png'));
         const codiconsUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
         const mpld3Uri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'node_modules', 'mpld3', 'dist', 'mpld3.v0.5.10.min.js'));
-        const d3Uri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'node_modules',  'mpld3', 'dist', 'd3.v5.min.js'));
+        
+        // Generate a nonce to add to the script element
         const randomBytes = crypto.randomBytes(16);
         const nonce = randomBytes.toString('base64');
 
+        // Check if the selected HDU is an image
         const isImage = document.file[`hdu${document.selectedHdu}`].encoded_image;
         const selected = `hdu${document.selectedHdu}`;
 
@@ -181,8 +195,15 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         webviewPanel: vscode.WebviewPanel,
         _token: vscode.CancellationToken
     ): Promise<void> {
-        // Add the webview to our internal set of active webviews
-		this.webviews.add(document.uri, webviewPanel);
+        /**
+         * This function resolves the webview panel with the new document
+         * 
+         * @param document The document to be displayed in the webview
+         * @param webviewPanel The webview panel to be updated
+         * @param _token The cancellation token
+         * 
+         * @returns void
+         */
         
         // Setup initial content for the webview
         webviewPanel.webview.options = {
@@ -190,25 +211,26 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         };
     
         // Call the open method to load the header
-        // Get the initial size of the web panel
         await document.open();
 
+        // Set the webview for the document
         await this.setWebviewForDocument(document, webviewPanel);
 
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(
             async message => {
                 switch (message.command) {
+                    // Handle hdu selected change
                     case 'hduSelectorChanged':
                         document.selectedHdu = message.newSelectedHdu;
                         this.setWebviewForDocument(document, webviewPanel);
                         break;
+                    // Handle colormap change
                     case 'colormapChanged':
                         document.options.colormap = message.newColormap;
 
-                        //document.file = document.generateImageFromFits(document.uri.fsPath, JSON.stringify(document.options));
-                        //console.log(file);
                         await document.open();
+
                         webviewPanel.webview.postMessage({ 
                             command: 'updateImage', 
                             data: JSON.stringify({
@@ -218,12 +240,12 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
                             })
                         });
                         break;
+                    // Handle scale change
                     case 'scaleChanged':
                         document.options.scale = message.newScale;
 
-                        //document.file = document.generateImageFromFits(document.uri.fsPath, JSON.stringify(document.options));
-                        //console.log(file);
                         await document.open();
+
                         webviewPanel.webview.postMessage({ 
                             command: 'updateImage', 
                             data: JSON.stringify({
@@ -307,6 +329,15 @@ class CustomDocument implements vscode.CustomDocument {
     }
 
     async generateImageFromFits(fitsFilePath: string, options: string): Promise<any> {
+        /**
+         * This function reads a FITS file and returns the image data, headers and html.
+         * It connects with python to run this process.
+         * 
+         * @param fitsFilePath The path to the FITS file
+         * @param options The options to be passed to the Python script
+         * 
+         * @returns A Json string containing the image data, the headers and html.
+         */
         return new Promise<any>((resolve, reject) => {
             const pythonScriptPath = path.join(__dirname, 'python', 'generate_image.py');
             
@@ -337,12 +368,12 @@ class CustomDocument implements vscode.CustomDocument {
         });
     }
 
-	dispose(): void {
-	}
+	dispose(): void {}
 }
 
 // Activate the extension
 export function activate(context: vscode.ExtensionContext) {
+    // Install the Python dependencies
     if (osvar === "win32") {
         spawn("python", ["-m", "pip", "install", "-r", requirements]);
       } else {
@@ -363,37 +394,4 @@ export function activate(context: vscode.ExtensionContext) {
 // Deactivate the extension
 export function deactivate() {
     // Clean up resources when the extension is deactivated
-}
-
-class WebviewCollection {
-
-	private readonly _webviews = new Set<{
-		readonly resource: string;
-		readonly webviewPanel: vscode.WebviewPanel;
-	}>();
-
-	/**
-	 * Get all known webviews for a given uri.
-	 */
-	public *get(uri: vscode.Uri): Iterable<vscode.WebviewPanel> {
-		const key = uri.toString();
-		for (const entry of this._webviews) {
-			if (entry.resource === key) {
-				yield entry.webviewPanel;
-			}
-		}
-	}
-
-	/**
-	 * Add a new webview to the collection.
-	 */
-	public add(uri: vscode.Uri, webviewPanel: vscode.WebviewPanel) {
-		const entry = { resource: uri.toString(), webviewPanel };
-		this._webviews.add(entry);
-        
-
-		webviewPanel.onDidDispose(() => {
-			this._webviews.delete(entry);
-		});
-	}
 }

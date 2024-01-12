@@ -41,7 +41,6 @@ const watchConfig = {
 
 (async () => {
     const args = process.argv.slice(2);
-    console.log("hellooo =---------------");
     try {
       if (args.includes("--watch")) {
         // Build and watch extension and webview code

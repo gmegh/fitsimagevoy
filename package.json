@@ -1,10 +1,11 @@
 {
   "name": "fitsimagevoy",
   "displayName": "FitsImageVOY",
-  "description": "Visualizing FITS files directly within the Visual Studio Code environment.",
+  "icon": "./assets/appIcon.png",
+  "description": "Visualize FITS files with VSCode.",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
@@ -33,10 +34,6 @@
     "webview",
     "assets"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gmegh/fitsimagevoy.git"
-  },
   "type": "commonjs",
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -52,7 +49,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
-    "@types/vscode": "^1.85.0",
+    "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "@vscode/test-cli": "^0.0.4",
@@ -75,5 +72,9 @@
     "mpld3": "^0.5.10",
     "pngjs": "^7.0.0",
     "uuid": "^9.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gmegh/fitsimagevoy.git"
   }
 }

@@ -18,7 +18,7 @@
 
 FitsImageVOY is dedicated to the Rubin observatory scientists who will discover the questions of the next 50 years. The name FitsImageVOY refers to the Voyager series of Star Trek, the successor of DS9 (Deep Space Nine), after which SAOImageDS9 was named. This extension pays homage to the legacy of exploration and discovery.
 
-**Author:** Guillem Megias ([gmegh](https://github.com/gmegh/))
+**Author:** Guillem Megias Homar ([gmegh](https://github.com/gmegh/))
 **Developed at:** KIPAC, Stanford University
 
 ## Attribution

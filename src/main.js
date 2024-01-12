@@ -1,14 +1,29 @@
-// Function to update the header info with the received data
+// This File is imported into the webview via the script tag
+// This file is used to communicate with VS Code
+// It uses the vscode namespace to enable communication via postMessage()
+// It uses the acquireVsCodeApi() function to get a reference to VS Code
 
 async function updateHeaderInfo(data) {
+    /**
+     * This function updated the header info section of the webview
+     * It updates the selectable options for the HDU, colormap, and scale.
+     * 
+     * @param {string} data - JSON stringified object containing the file, selectedHdu, and options
+     * 
+     * @returns {void} 
+     */
+
+    // Get a reference to VS Code
     const headerInfoElement = document.getElementById('headerInfo');
     const hduSelector = document.getElementById('hduSelector');
     const colorSelector = document.getElementById('colorSelector');
     const scaleSelector = document.getElementById('scaleSelector');
     const searchInput = document.getElementById('input');
 
+    // Parse the data
     const { file, selectedHdu, options } = JSON.parse(data);
 
+    // -------- Begin HDU selector -------- //
     // Update the HDU list and select the specified HDU
     hduSelector.innerHTML = Object.keys(file).map((element, index) => {
         const isSelected = index === selectedHdu;
@@ -24,30 +39,36 @@ async function updateHeaderInfo(data) {
             newSelectedHdu: newSelectedHdu
         });
     });
+    // -------- End of HDU selector -------- //
 
+    // -------- Begin colormap selector -------- //
     const colormapOptions = ['viridis', 'gray', 'rainbow', 'hot', 'jet', 'aips0'].map((color) => {
         const isSelected = color === options.colormap;
-        return `<vscode-radio value="${color}" ${isSelected ? 'checked' : ''} onclick="updateVariable('${color}')">${color}</vscode-radio>`;
+        return `<vscode-radio value="${color}" ${isSelected ? 'checked' : ''} onclick="updateColor('${color}')">${color}</vscode-radio>`;
     }).join('');
     colorSelector.innerHTML = `<label slot="label">Colormap</label>${colormapOptions}`;
-
+    // -------- End of colormap selector -------- //
 
     const capitalizeFirstLetter = (string) => {
+        // Capitalize the first letter of a string
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
       
+    // -------- Begin scale selector -------- //
     const scaleOptions = ['linear', 'logarithmic', 'power', 'sqrt',  'squared'].map((value) => {
         const label = capitalizeFirstLetter(value);
         const isSelected = value === options.scale;
         return `<vscode-radio value="${value}" ${isSelected ? 'checked' : ''} onclick="updateScale('${value}')">${label}</vscode-radio>`;
     }).join('');
     scaleSelector.innerHTML = `<label slot="label">Scale</label>${scaleOptions}`;
+    // -------- End of scale selector -------- //
     
     // Add an event listener to the search input
     searchInput.addEventListener('input', function() {
         handleSearch(searchInput);
     });
 
+    // -------- Begin header info table -------- //
     // Display header keys and values in a table for the selected HDU
     const selectedHeader = file[`hdu${selectedHdu}`].header;
     const tableHtml = `
@@ -67,8 +88,9 @@ async function updateHeaderInfo(data) {
         </vscode-data-grid>
     `;
     headerInfoElement.innerHTML = tableHtml;
+    // -------- End of header info table -------- //
 
-    // Create a data URL
+    // Display the image if it exists, otherwise display placeholder text
     if (file[`hdu${selectedHdu}`].encoded_image) {
         document.getElementById('imageDiv').style.display = 'block';
         document.getElementById('placeholderText').style.display = 'none';
@@ -76,17 +98,10 @@ async function updateHeaderInfo(data) {
         document.getElementById('imageDiv').style.display = 'none';
         document.getElementById('placeholderText').style.display = 'block';
     }
-    
-    // Set the data URL as the source for an <img> tag
-    //const dataUrl = `data:image/png;base64,${file[`hdu${selectedHdu}`].encoded_image}`;
-    //imgElement.src = dataUrl;
 }
 
-
-
-
-// Get all radio buttons within the radio group
-function updateVariable(event) {
+// Update the color value in the options
+function updateColor(event) {
     // Post a message to VS Code
     vscode.postMessage({
         command: 'colormapChanged',
@@ -94,7 +109,7 @@ function updateVariable(event) {
     });
 }
 
-// Get all radio buttons within the radio group
+// Update the scale value in the options
 function updateScale(event) {
     // Post a message to VS Code
     vscode.postMessage({
@@ -104,6 +119,9 @@ function updateScale(event) {
 }
 
 function adjustScale() {
+    // Adjust the scale of the image to fit the webview
+
+    // Get the image element
     var imageDiv = document.getElementById('mpld3Figure2');
     var imageSection = document.getElementById('imageSection');
     var mpld3Figure = document.querySelector('#imageDiv .mpld3-figure');
@@ -138,7 +156,46 @@ window.addEventListener('message', async event => {
     }
 });
 
+// Define the updateImageContent function
+function updateImageContent(data) {
+    /**
+     * This function updates the image content of the webview
+     * 
+     * @param {string} data - JSON stringified object containing the file, selectedHdu, and options
+     * 
+     * @returns {void}
+     *  
+    */
+
+    // Get a reference to VS Code
+    const imageDiv = document.getElementById('imageDiv');
+
+    // Parse the data
+    const { file, selectedHdu, _ } = JSON.parse(data);
+
+    // Update the image content
+    if (imageDiv) {
+        // Update the image content
+        imageDiv.innerHTML = file[`hdu${selectedHdu}`]['html_plot'];
+
+        // Get the current scripts
+        const currentScripts = Array.from(imageDiv.querySelectorAll('script'));
+
+        // Re-execute scripts
+        currentScripts.forEach(script => {
+            const newScript = document.createElement('script');
+            newScript.textContent = script.textContent;
+            newScript.setAttribute('nonce', generateNonce());
+            document.body.appendChild(newScript);
+        });
+
+        // Adjust the scale
+        adjustScale();
+    }
+}
+
 function generateNonce() {
+    // Generate a random nonce
     const randomBytes = new Uint8Array(16);
     crypto.getRandomValues(randomBytes);
     const nonce = Array.from(randomBytes)
@@ -146,27 +203,7 @@ function generateNonce() {
       .join('');
     return nonce;
   }
-  
 
-function updateImageContent(data) {
-    const imageDiv = document.getElementById('imageDiv');
-    const { file, selectedHdu, _ } = JSON.parse(data);
-    if (imageDiv) {
-
-        imageDiv.innerHTML = file[`hdu${selectedHdu}`]['html_plot'];
-        const currentScripts2 = Array.from(imageDiv.querySelectorAll('script'));
-
-        // Re-execute scripts
-        currentScripts2.forEach(script => {
-            const newScript = document.createElement('script');
-            newScript.textContent = script.textContent;
-            newScript.setAttribute('nonce', generateNonce());
-            document.body.appendChild(newScript);
-        });
-
-        adjustScale();
-    }
-}
 
 // Define the handleSearch function
 function handleSearch(searchInput) {

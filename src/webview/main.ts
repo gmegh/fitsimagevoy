@@ -1,3 +1,4 @@
+// Here all the VSCode components imported from the webview-ui-toolkit are registered
 import { 
     provideVSCodeDesignSystem, 
     vsCodeButton, 
