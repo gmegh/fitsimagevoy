@@ -13,6 +13,19 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+        "myExtension.defaultColormap": {
+            "type": "string",
+            "default": "viridis",
+            "description": "Default colormap for the extension plots."
+        },
+        "myExtension.defaultScale": {
+            "type": "string",
+            "default": "linear",
+            "enum": ["linear", "logarithmic", "power", "sqrt", "squared"],
+            "description": "Default scale for the extension plots."
+        }
+    },
     "customEditors": [
       {
         "viewType": "fitsimagevoy.fits",

@@ -29,7 +29,6 @@ FitsImageVOY makes use of the following libraries and tools:
 - [d3js](https://d3js.org/): A JavaScript library for producing dynamic, interactive data visualizations.
 - [Matplotlib](https://matplotlib.org/): A comprehensive library for creating static, animated, and interactive visualizations in Python.
 - [Astropy](https://www.astropy.org/): A community-developed library for astronomy in Python.
-- [ChatGPT](https://openai.com/gpt): Powered by GPT-3, ChatGPT provides language model capabilities.
 
 ## Next Steps
 

@@ -277,9 +277,13 @@ class CustomDocument implements vscode.CustomDocument {
 
     constructor(uri: vscode.Uri) {
         this._uri = uri;
+
+        const configuration = vscode.workspace.getConfiguration('myExtension');
+        const defaultColormap = configuration.get('defaultColormap', 'viridis');
+        const defaultScale = configuration.get('defaultScale', 'linear');
         this.options = {
-            'colormap': 'viridis',
-            'scale': 'linear',
+            'colormap': defaultColormap,
+            'scale': defaultScale,
         }; 
     }
     get uri(): vscode.Uri {
