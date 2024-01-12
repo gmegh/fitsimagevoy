@@ -1,6 +1,4 @@
-# fitsimagevoy README
-
-![FitsImageVOY](assets/appIcon.png)
+# FitsImageVOY for Visual Studio Code
 
 **FitsImageVOY** is a Visual Studio Code extension designed for astronomers, astrophysicists, and enthusiasts interested in visualizing FITS (Flexible Image Transport System) files directly within the Visual Studio Code environment. This extension provides a lightweight yet powerful solution, serving as a scaled-down version of SAOImageDS9.
 
