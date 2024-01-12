@@ -1,6 +1,11 @@
 # FitsImageVOY for Visual Studio Code
 
-**FitsImageVOY** is a Visual Studio Code extension designed for astronomers, astrophysicists, and enthusiasts interested in visualizing FITS (Flexible Image Transport System) files directly within the Visual Studio Code environment. This extension provides a lightweight yet powerful solution, serving as a scaled-down version of SAOImageDS9.
+**FitsImageVOY** is a Visual Studio Code extension designed for astronomers, astrophysicists, and enthusiasts interested in visualizing FITS (Flexible Image Transport System) files directly within the Visual Studio Code environment. This extension provides a lightweight yet powerful solution, serving as a scaled-down version of SAOImageDS9. 
+
+Tired of loading FITS files in DS9 or jupyter notebooks? FitsImageVOY is the solution for you! FitsImageVOY provides a seamless and integrated environment for your astronomical data analysis.
+
+![FitsImageVOY in Action](assets/screenshot.png)
+
 
 ## Features
 
@@ -16,9 +21,12 @@
 
 ## About FitsImageVOY
 
-FitsImageVOY is dedicated to the Rubin observatory scientists who will discover the questions of the next 50 years. The name FitsImageVOY refers to the Voyager series of Star Trek, the successor of DS9 (Deep Space Nine), after which SAOImageDS9 was named. This extension pays homage to the legacy of exploration and discovery.
+The name FitsImageVOY refers to the Voyager series of Star Trek, the successor of DS9 (Deep Space Nine), after which SAOImageDS9 was named. This extension pays homage to the legacy of exploration and discovery. DS9, a space station in the Star Trek universe, marked the beginning of a transformative journey into the cosmos. As the successor to DS9, the Voyager series continued this legacy, venturing into uncharted territories and inspiring generations of astronomers and space enthusiasts. SAOImageDS9, a powerful astronomical imaging tool, inherits its name from this iconic series. FitsImageVOY, drawing inspiration from SAOImageDS9, follows in the footsteps of DS9 and the Voyager series, contributing to the ongoing saga of cosmic exploration in the realm of data visualization for astronomers and researchers.
+
+FitsImageVOY is dedicated to the Rubin observatory scientists who will discover the questions of the next 50 years. Learn more about the groundbreaking [Rubin Observatory](https://www.lsst.org/) project. 
 
 **Developed at:** KIPAC, Stanford University
+
 **Author:** Guillem Megias Homar ([gmegh](https://github.com/gmegh/))
 
 ## Attribution
@@ -32,6 +40,8 @@ FitsImageVOY makes use of the following libraries and tools:
 
 ## Next Steps
 
+We're committed to continuously enhancing FitsImageVOY. Here are some planned improvements:
+
 ### Copy to Clipboard
 
 Copy relevant information or visualizations to the clipboard for easy sharing or further analysis.
@@ -39,6 +49,8 @@ Copy relevant information or visualizations to the clipboard for easy sharing or
 ### Enhanced Visualization Options
 
 Explore additional visualization options to enhance your experience with FITS files in Visual Studio Code.
+
+Feel free to contribute or share your ideas by [contacting the author](https://github.com/gmegh/).
 
 ## Installation
 

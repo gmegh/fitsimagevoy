@@ -4,6 +4,7 @@
   "icon": "./assets/appIcon.png",
   "description": "Visualize FITS files with VSCode.",
   "version": "0.0.1",
+  "publisher": "Guillem Megias Homar",
   "engines": {
     "vscode": "^1.75.0"
   },
