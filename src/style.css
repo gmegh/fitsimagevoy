@@ -1,0 +1,231 @@
+/* style.css */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Make the body take the full height of the viewport */
+    width: 100vw;
+    margin-top: 0px; /* Remove default margin to ensure full width */
+    padding: 0;
+}
+h1, h2 {
+    text-align: left;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 95%;
+    overflow: hidden;
+}
+
+#headerInfoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 40%;
+    overflow: hidden;
+}
+
+#optionsSection {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 40%;
+    margin: 20px;
+    overflow: hidden;
+}
+
+#optionsSection h2 {
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+#headerInfoSection {
+    display: flex;
+    flex-direction: column;
+    height: 90%; 
+    margin: 20px;
+    width: 60%; /* Adjust to fill the entire height minus any borders or padding */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+#headerInfoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#headerInfoHeader h2 {
+    margin: 0;
+}
+
+#input {
+    margin-left: auto; /* Push the search field to the right */
+}
+
+#headerInfo {
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    border: 1px solid #ddd; /* Add a border for visibility, you can remove this */
+    box-sizing: border-box; /* Include border in height calculation */
+}
+
+#imageSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width:100%;
+}
+
+#imageDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    height: 100%;
+}
+
+#mpld3Figure2 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+
+.column-header {
+    font-size:16px; /* Set your desired font size */
+    color: black;
+    font-weight: semi-bold; /* Set your desired font weight */
+}
+.sticky-header {
+    background-color: #f0f0f0; /* Set your desired background color */
+}
+vscode-data-grid-row:not([row-type="sticky-header"]) {
+    background-color: #ffffff; /* Set the background color for non-header rows */
+}
+
+vscode-data-grid-row:not([row-type="sticky-header"]):nth-child(even) {
+    background-color:  #fbfbfb; /* Set the background color for even rows */
+}
+
+vscode-data-grid-cell:not([cell-type="columnheader"]):first-child {
+    font-weight: semi-bold; /* Set semi-bold (font-weight 600) for the first cell in non-header rows */
+}
+
+.dropdown-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.dropdown-container label {
+    display: block;
+    color: var(--vscode-foreground);
+    cursor: pointer;
+    font-size: var(--vscode-font-size);
+    line-height: normal;
+    margin-bottom: 2px;
+}
+
+vscode-divider {
+  margin: 10px 0;
+}
+
+
+footer {
+    display:flex;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    background-color: #fcfafa; /* Set a light background color */
+    text-align: center;
+    border-top: 2px solid #ccc; 
+}
+
+#footerContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+    padding: 10px;
+}
+
+#kipacLogo img {
+    max-width: 50px; /* Set the maximum width for the logo */
+    max-height: 50px; /* Set the maximum height for the logo */
+}
+
+#footerText,
+#kipacLogo {
+    align-items: center;
+    justify-content: center;
+}
+#footerText {
+    text-align: left; /* Align text on the left */
+    margin-left: 10px;
+}
+
+#footerText p {
+    margin: 0;
+    font-size: 11px;
+    color: #333; /* Set the text color */
+}
+
+#footerText a {
+    color: #007acc; /* Set the link color */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#footerText a:hover {
+    text-decoration: underline;
+}
+
+
+#headerContainer {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    width:100%;
+    height: 10%;
+    background-color: #fcfafa; /* Set a very faint gray background color */
+    border-bottom: 1px solid #ccc; /* Set a bottom border */
+}
+
+#headerContent {
+    display: flex;
+    align-items: center;
+    padding:20px;
+}
+
+#headerContent img {
+    max-width: 50px;
+    max-height: 50px;
+    margin-right: 10px;
+}
+#headerContent h2, #headerContent p {
+    margin: 0;
+    text-align: left;
+}
+
+#headerContent h2 {
+    margin-bottom: 5px;
+}

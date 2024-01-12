@@ -1,0 +1,27 @@
+import { 
+    provideVSCodeDesignSystem, 
+    vsCodeButton, 
+    vsCodeDropdown, 
+    vsCodeOption, 
+    vsCodeDivider,
+    vsCodeDataGrid, 
+    vsCodeDataGridRow, 
+    vsCodeDataGridCell,
+    vsCodeTextField,
+    vsCodeRadioGroup,
+    vsCodeRadio,
+} from "@vscode/webview-ui-toolkit";
+
+provideVSCodeDesignSystem().register(
+    vsCodeButton(),
+    vsCodeDropdown(),
+    vsCodeOption(),
+    vsCodeDivider(),
+    vsCodeDataGrid(),
+    vsCodeDataGridRow(),
+    vsCodeDataGridCell(),
+    vsCodeTextField(),
+    vsCodeRadioGroup(),
+    vsCodeRadio(),
+);
+  

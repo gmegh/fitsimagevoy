@@ -1,0 +1,8 @@
+vscode-ext
+mpld3
+astropy==4.3.1
+numpy==1.21.2
+base64
+matplotlib
+warnings
+json
