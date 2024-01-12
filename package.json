@@ -9,6 +9,8 @@
     "vscode": "^1.75.0"
   },
   "categories": [
+    "Visualization",
+    "Programming Languages",
     "Other"
   ],
   "activationEvents": [],
