@@ -13,6 +13,8 @@ async function updateHeaderInfo(data) {
      * @returns {void} 
      */
 
+    console.log("hellooo---------");
+
     // Get a reference to VS Code
     const headerInfoElement = document.getElementById('headerInfo');
     const hduSelector = document.getElementById('hduSelector');
@@ -144,7 +146,7 @@ function adjustScale() {
 // Listen for messages from the webview
 window.addEventListener('message', async event => {
     const message = event.data;
-
+    
     if (message.command === 'updateHeaderInfo') {
         await updateHeaderInfo(message.data);
         await adjustScale();

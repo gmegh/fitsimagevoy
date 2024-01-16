@@ -1,10 +1,10 @@
 {
   "name": "fitsimagevoy",
   "displayName": "FitsImageVOY",
-  "icon": "./assets/appIcon.png",
+  "icon": "./assets/images/appIcon.png",
   "description": "Visualize FITS files with VSCode.",
-  "version": "0.0.1",
-  "publisher": "Guillem Megias Homar",
+  "version": "0.0.3",
+  "publisher": "fits",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -17,17 +17,23 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-        "myExtension.defaultColormap": {
-            "type": "string",
-            "default": "viridis",
-            "description": "Default colormap for the extension plots."
-        },
-        "myExtension.defaultScale": {
-            "type": "string",
-            "default": "linear",
-            "enum": ["linear", "logarithmic", "power", "sqrt", "squared"],
-            "description": "Default scale for the extension plots."
-        }
+      "myExtension.defaultColormap": {
+        "type": "string",
+        "default": "viridis",
+        "description": "Default colormap for the extension plots."
+      },
+      "myExtension.defaultScale": {
+        "type": "string",
+        "default": "linear",
+        "enum": [
+          "linear",
+          "logarithmic",
+          "power",
+          "sqrt",
+          "squared"
+        ],
+        "description": "Default scale for the extension plots."
+      }
     },
     "customEditors": [
       {
@@ -46,8 +52,8 @@
   },
   "files": [
     "out",
-    "node_modules",
     "webview",
+    "src",
     "assets"
   ],
   "type": "commonjs",
@@ -68,6 +74,7 @@
     "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/codicons": "^0.0.35",
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.8",
     "esbuild": "^0.16.17",
@@ -78,7 +85,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@vscode/codicons": "^0.0.35",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "astrojs": "^0.1.3",
     "crypto": "^1.0.1",
@@ -87,7 +93,8 @@
     "fitsjs": "^0.6.6",
     "mpld3": "^0.5.10",
     "pngjs": "^7.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "vscode-codicons": "^0.0.17"
   },
   "repository": {
     "type": "git",

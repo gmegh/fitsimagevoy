@@ -4,7 +4,7 @@
 
 **Tired of loading FITS files in DS9 or jupyter notebooks 😓💤?** FitsImageVOY is the solution for you! FitsImageVOY provides a seamless and integrated environment for your astronomical data analysis.
 
-![FitsImageVOY in Action](assets/screenshot.png)
+![FitsImageVOY in Action](assets/images/screenshot.png)
 
 
 ## Features
