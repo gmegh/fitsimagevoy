@@ -13,8 +13,6 @@ async function updateHeaderInfo(data) {
      * @returns {void} 
      */
 
-    console.log("hellooo---------");
-
     // Get a reference to VS Code
     const headerInfoElement = document.getElementById('headerInfo');
     const hduSelector = document.getElementById('hduSelector');
@@ -56,6 +54,8 @@ async function updateHeaderInfo(data) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
       
+    window.addEventListener('resize', adjustScale);
+
     // -------- Begin scale selector -------- //
     const scaleOptions = ['linear', 'logarithmic', 'power', 'sqrt',  'squared'].map((value) => {
         const label = capitalizeFirstLetter(value);
@@ -100,47 +100,33 @@ async function updateHeaderInfo(data) {
         document.getElementById('imageDiv').style.display = 'none';
         document.getElementById('placeholderText').style.display = 'block';
     }
+
+    return;
 }
 
-// Update the color value in the options
-function updateColor(event) {
-    // Post a message to VS Code
-    vscode.postMessage({
-        command: 'colormapChanged',
-        newColormap: event
-    });
-}
-
-// Update the scale value in the options
-function updateScale(event) {
-    // Post a message to VS Code
-    vscode.postMessage({
-        command: 'scaleChanged',
-        newScale: event
-    });
-}
 
 function adjustScale() {
     // Adjust the scale of the image to fit the webview
-
     // Get the image element
     var imageDiv = document.getElementById('mpld3Figure2');
     var imageSection = document.getElementById('imageSection');
     var mpld3Figure = document.querySelector('#imageDiv .mpld3-figure');
-    var bbox = mpld3Figure.getBBox();
-    var aspectRatioWidth = (imageSection.clientWidth - 20) / bbox.width ;
-    var aspectRatioHeight = (imageSection.clientHeight - 20) / bbox.height ;
-    var aspectRatio = Math.min(aspectRatioWidth, aspectRatioHeight);
 
-    // Apply the scaling transformation
-    imageDiv.style.transform = 'scale(' + aspectRatio + ')';
-    imageDiv.style.transformOrigin = 'top center';
+    if (mpld3Figure !== null) {
+        var bbox = mpld3Figure.getBBox();
+        var aspectRatioWidth = (imageSection.clientWidth - 20) / bbox.width ;
+        var aspectRatioHeight = (imageSection.clientHeight - 20) / bbox.height ;
+        var aspectRatio = Math.min(aspectRatioWidth, aspectRatioHeight);
 
-    var svgElement = document.querySelector('.mpld3-toolbar');
+        // Apply the scaling transformation
+        imageDiv.style.transform = 'scale(' + aspectRatio + ')';
 
-    // Change the y property to a new value, for example, 200
-    svgElement.setAttribute('y', '20');
-    svgElement.setAttribute('x', 20*bbox.width / bbox.height);
+        var svgElement = document.querySelector('.mpld3-toolbar');
+
+        // Change the y property to a new value, for example, 200
+        svgElement.setAttribute('y', '40');
+        svgElement.setAttribute('x', 10*bbox.width / bbox.height);
+    }
 }
 
 // Listen for messages from the webview
@@ -149,17 +135,17 @@ window.addEventListener('message', async event => {
     
     if (message.command === 'updateHeaderInfo') {
         await updateHeaderInfo(message.data);
-        await adjustScale();
+        adjustScale();
     }
 
     if (message.command === 'updateImage') {
         await updateImageContent(message.data);
-        await adjustScale();
+        adjustScale();
     }
 });
 
 // Define the updateImageContent function
-function updateImageContent(data) {
+async function updateImageContent(data) {
     /**
      * This function updates the image content of the webview
      * 
@@ -190,10 +176,9 @@ function updateImageContent(data) {
             newScript.setAttribute('nonce', generateNonce());
             document.body.appendChild(newScript);
         });
-
-        // Adjust the scale
-        adjustScale();
     }
+
+    return;
 }
 
 function generateNonce() {

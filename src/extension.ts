@@ -141,36 +141,42 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
                 </div>
             </div>
             <script type="module" src="${webviewUri}"></script>
-            <script src="${scriptPath}"></script>
             <script>
                 const vscode = acquireVsCodeApi();
-                function adjustScale() {
-                    var imageDiv = document.getElementById('mpld3Figure2');
-                    var imageSection = document.getElementById('imageSection');
-                    var mpld3Figure = document.querySelector('#imageDiv .mpld3-figure');
 
-                    if (mpld3Figure) {
-                        var bbox = mpld3Figure.getBBox();
-                        var aspectRatioWidth = (imageSection.clientWidth - 20) / bbox.width ;
-                        var aspectRatioHeight = (imageSection.clientHeight - 20) / bbox.height ;
-                        var aspectRatio = Math.min(aspectRatioWidth, aspectRatioHeight);
-                    
-                        // Apply the scaling transformation
-                        imageDiv.style.transform = 'scale(' + aspectRatio + ')';
-                        imageDiv.style.transformOrigin = 'top center';
-                    
-                        var svgElement = document.querySelector('.mpld3-toolbar');
-                    
-                        // Change the y property to a new value, for example, 200
-                        svgElement.setAttribute('y', '20');
-                        svgElement.setAttribute('x', 20*bbox.width / bbox.height);
-                    }
+                // Update the color value in the options
+                function updateColor(event) {
+                    // Post a message to VS Code
+                    vscode.postMessage({
+                        command: 'colormapChanged',
+                        newColormap: event
+                    });
+                }
+
+                // Update the scale value in the options
+                function updateScale(event) {
+                    // Post a message to VS Code
+                    vscode.postMessage({
+                        command: 'scaleChanged',
+                        newScale: event
+                    });
                 }
 
                 // Adjust the scale on page load and whenever the window is resized
-                document.addEventListener('DOMContentLoaded', adjustScale);
-            
-                window.addEventListener('resize', adjustScale);
+                document.addEventListener('DOMContentLoaded',  () => {
+                    // Dynamically create a script element for main.js
+                    const mainScript = document.createElement('script');
+                    mainScript.type = 'module';
+                    mainScript.nonce = '${nonce}';
+                    mainScript.src = '${scriptPath}';
+                    // Append the script element to the document
+                    document.body.appendChild(mainScript);
+
+                    // Post a message to VS Code
+                    vscode.postMessage({
+                        command: 'doneLoading'
+                    });
+                });
             </script>
         </body>
         <footer>
@@ -189,9 +195,6 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
         </html>`;
 
         webviewPanel.webview.html = new_html;
-        setTimeout(async () => {
-            await webviewPanel.webview.postMessage({ command: 'updateHeaderInfo', data: documentDataJson });
-        }, 10);
     }
 
     async resolveCustomEditor(
@@ -228,6 +231,18 @@ class CustomEditorProvider implements vscode.CustomReadonlyEditorProvider {
                     case 'hduSelectorChanged':
                         document.selectedHdu = message.newSelectedHdu;
                         await this.setWebviewForDocument(document, webviewPanel);
+                        break;
+                    case 'doneLoading':
+                        const documentDataJson = JSON.stringify({
+                            file: document.file,
+                            selectedHdu: document.selectedHdu,
+                            options: document.options,
+                        });
+
+                        await webviewPanel.webview.postMessage({
+                            command: 'updateHeaderInfo', 
+                            data: documentDataJson 
+                        });
                         break;
                     // Handle colormap change
                     case 'colormapChanged':
@@ -365,6 +380,7 @@ class CustomDocument implements vscode.CustomDocument {
                 command = pythonInterpreterPath;
             }
         
+            //const command = osvar === 'win32' ? 'python' : 'python3';
             //const activationCommand = 'source /sdf/group/rubin/sw/w_latest/loadLSST.bash';
             const activationCommand = '';
             const pythonScriptPath = path.join(__dirname, 'python', 'generate_image.py');
@@ -413,6 +429,7 @@ export function activate(context: vscode.ExtensionContext) {
     const pythonInterpreterPath: string | undefined = vscode.workspace.getConfiguration('python').get('defaultInterpreterPath');
     
     let command = '';
+    //const command = osvar === 'win32' ? 'python' : 'python3';
     if (pythonInterpreterPath === undefined) {
         command = osvar === 'win32' ? 'python' : 'python3';
     } else {
