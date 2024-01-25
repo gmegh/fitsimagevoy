@@ -1,92 +1,17 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/extension.ts
-var extension_exports = {};
-__export(extension_exports, {
-  activate: () => activate,
-  deactivate: () => deactivate
-});
-module.exports = __toCommonJS(extension_exports);
-var vscode = __toESM(require("vscode"));
-var crypto = __toESM(require("crypto"));
-var import_child_process = require("child_process");
-var osvar = process.platform;
-var path = require("path");
-var requirements = path.join(__dirname, "python/requirements.txt");
-var CustomEditorProvider = class {
-  constructor(_context) {
-    this._context = _context;
-  }
-  openDocuments = /* @__PURE__ */ new Map();
-  // Implement the necessary methods (open, resolve, etc.)
-  openCustomDocument(uri, openContext, token) {
-    let existingDocument = this.openDocuments.get(uri.fsPath);
-    if (existingDocument) {
-      return existingDocument;
-    }
-    const newDocument = new CustomDocument(uri);
-    this.openDocuments.set(uri.fsPath, newDocument);
-    return newDocument;
-  }
-  // Implement the necessary methods (open, resolve, etc.)
-  async setWebviewForDocument(document, webviewPanel) {
-    const documentDataJson = JSON.stringify({
-      file: document.file,
-      selectedHdu: document.selectedHdu,
-      options: document.options
-    });
-    const scriptPath = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "assets/main.js"));
-    const stylePath = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "assets/style.css"));
-    const webviewUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "dist/webview.js"));
-    const appIconUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "assets/images/appIcon.png"));
-    const kipacLogoUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "assets/images/KIPAC_stack.png"));
-    const codiconsUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "node_modules/vscode/codicons/dist/codicon.css"));
-    const codiconsFontUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, "node_modules", "vscode/codicons", "dist", "codicon.ttf"));
-    const randomBytes2 = crypto.randomBytes(16);
-    const nonce = randomBytes2.toString("base64");
-    const isImage = document.file[`hdu${document.selectedHdu}`].encoded_image;
-    const selected = `hdu${document.selectedHdu}`;
-    const new_html = `<!DOCTYPE html>
+"use strict";var I=Object.create;var v=Object.defineProperty;var H=Object.getOwnPropertyDescriptor;var D=Object.getOwnPropertyNames;var P=Object.getPrototypeOf,$=Object.prototype.hasOwnProperty;var k=(i,e)=>{for(var t in e)v(i,t,{get:e[t],enumerable:!0})},C=(i,e,t,n)=>{if(e&&typeof e=="object"||typeof e=="function")for(let o of D(e))!$.call(i,o)&&o!==t&&v(i,o,{get:()=>e[o],enumerable:!(n=H(e,o))||n.enumerable});return i};var S=(i,e,t)=>(t=i!=null?I(P(i)):{},C(e||!i||!i.__esModule?v(t,"default",{value:i,enumerable:!0}):t,i)),F=i=>C(v({},"__esModule",{value:!0}),i);var E={};k(E,{activate:()=>j,deactivate:()=>O});module.exports=F(E);var s=S(require("vscode")),_=S(require("crypto")),w=require("child_process"),b=process.platform,U=require("path"),W=U.join(__dirname,"python/requirements.txt"),f=class{constructor(e){this._context=e}openDocuments=new Map;openCustomDocument(e,t,n){let o=this.openDocuments.get(e.fsPath);if(o)return o;let a=new y(e);return this.openDocuments.set(e.fsPath,a),a}async setWebviewForDocument(e,t){let n=JSON.stringify({file:e.file,selectedHdu:e.selectedHdu,options:e.options}),o=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"assets/main.js")),a=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"assets/style.css")),p=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"dist/webview.js")),c=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"assets/images/appIcon.png")),m=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"assets/images/KIPAC_stack.png")),u=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"node_modules/vscode/codicons/dist/codicon.css")),g=t.webview.asWebviewUri(s.Uri.joinPath(this._context.extensionUri,"node_modules","vscode/codicons","dist","codicon.ttf")),h=_.randomBytes(16).toString("base64"),r=e.file[`hdu${e.selectedHdu}`].encoded_image,l=`hdu${e.selectedHdu}`,x=`<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta http-equiv=\u201CContent-Security-Policy\u201D content=\u201Cfont-src ${webviewPanel.webview.cspSource} ${codiconsFontUri} vscode-resource: \u2018unsafe-inline\u2019; style-src ${webviewPanel.webview.cspSource} ${codiconsUri} vscode-resource: \u2018unsafe-inline\u2019; script-src \u2018self\u2019 \u2018self\u2019 https://*.vscode-cdn.net https://d3js.org https://mpld3.github.io \u2018unsafe-inline\u2019; img-src \u2018self\u2019 \u2018self\u2019 https://*.vscode-cdn.net data:;\u201C>
+            <meta http-equiv=\u201CContent-Security-Policy\u201D content=\u201Cfont-src ${t.webview.cspSource} ${g} vscode-resource: \u2018unsafe-inline\u2019; style-src ${t.webview.cspSource} ${u} vscode-resource: \u2018unsafe-inline\u2019; script-src \u2018self\u2019 \u2018self\u2019 https://*.vscode-cdn.net https://d3js.org https://mpld3.github.io \u2018unsafe-inline\u2019; img-src \u2018self\u2019 \u2018self\u2019 https://*.vscode-cdn.net data:;\u201C>
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <title>Your Custom Editor</title>
-            <link href="${stylePath}" rel="stylesheet" type="text/css" >
+            <link href="${a}" rel="stylesheet" type="text/css" >
         </head>
         <body>
             <!-- Header Section -->
             <div id="headerContainer">
                 <div id="headerContent">
-                    <img src="${appIconUri}" alt="App Icon" width="50" height="50">
+                    <img src="${c}" alt="App Icon" width="50" height="50">
                     <div>
                         <h2>FitsImageVOY</h2>
                         <p>From DS9 to VOY, dedicated to all Rubin Observatory scientists</p>
@@ -135,14 +60,14 @@ var CustomEditorProvider = class {
                 <!-- Image Section -->
                 <div id="imageSection">
                     <div id="imageDiv" class="responsive-plot">
-                        ${isImage ? document.file[selected].html_plot : ""}
+                        ${r?e.file[l].html_plot:""}
                     </div>
                     <!-- Add your image or placeholder here -->
                     <!--  <img id="fits-image" alt="FITS Image" src="" onerror="showPlaceholder()"> -->
                     <h2 id="placeholderText" style="display: none;">No image to display.</h2>
                 </div>
             </div>
-            <script type="module" src="${webviewUri}"></script>
+            <script type="module" src="${p}"></script>
             <script>
                 const vscode = acquireVsCodeApi();
 
@@ -169,8 +94,8 @@ var CustomEditorProvider = class {
                     // Dynamically create a script element for main.js
                     const mainScript = document.createElement('script');
                     mainScript.type = 'module';
-                    mainScript.nonce = '${nonce}';
-                    mainScript.src = '${scriptPath}';
+                    mainScript.nonce = '${h}';
+                    mainScript.src = '${o}';
                     // Append the script element to the document
                     document.body.appendChild(mainScript);
 
@@ -190,194 +115,14 @@ var CustomEditorProvider = class {
                 
                 <div id="kipacLogo">
                     <!-- Replace 'path_to_your_logo.png' with the actual path to your KIPAC logo -->
-                    <img src="${kipacLogoUri}" alt="KIPAC Logo" style="max-width: 80px; height: auto;">
+                    <img src="${m}" alt="KIPAC Logo" style="max-width: 80px; height: auto;">
                 </div>
             </div>
         </footer>
-        </html>`;
-    webviewPanel.webview.html = new_html;
-  }
-  async resolveCustomEditor(document, webviewPanel, _token) {
-    webviewPanel.webview.options = {
-      enableScripts: true
-    };
-    await document.open();
-    await this.setWebviewForDocument(document, webviewPanel);
-    webviewPanel.webview.onDidReceiveMessage(
-      async (message) => {
-        switch (message.command) {
-          case "hduSelectorChanged":
-            document.selectedHdu = message.newSelectedHdu;
-            await this.setWebviewForDocument(document, webviewPanel);
-            break;
-          case "doneLoading":
-            const documentDataJson = JSON.stringify({
-              file: document.file,
-              selectedHdu: document.selectedHdu,
-              options: document.options
-            });
-            await webviewPanel.webview.postMessage({
-              command: "updateHeaderInfo",
-              data: documentDataJson
-            });
-            break;
-          case "colormapChanged":
-            document.options.colormap = message.newColormap;
-            await document.open();
-            webviewPanel.webview.postMessage({
-              command: "updateImage",
-              data: JSON.stringify({
-                file: document.file,
-                selectedHdu: document.selectedHdu,
-                options: document.options
-              })
-            });
-            break;
-          case "scaleChanged":
-            document.options.scale = message.newScale;
-            await document.open();
-            webviewPanel.webview.postMessage({
-              command: "updateImage",
-              data: JSON.stringify({
-                file: document.file,
-                selectedHdu: document.selectedHdu,
-                options: document.options
-              })
-            });
-            break;
-        }
-      },
-      void 0
-    );
-  }
-  saveCustomDocument(document, cancellation) {
-    return Promise.resolve();
-  }
-};
-var CustomDocument = class {
-  // Implement the necessary methods and properties for your custom document
-  _uri;
-  _file;
-  // Replace with the actual type of your header
-  _options;
-  _selectedHdu;
-  // Replace with the actual type of your header
-  constructor(uri) {
-    this._uri = uri;
-    const configuration = vscode.workspace.getConfiguration("fitsimagevoy");
-    const defaultColormap = configuration.get("defaultColormap", "viridis");
-    const defaultScale = configuration.get("defaultScale", "linear");
-    this.options = {
-      "colormap": defaultColormap,
-      "scale": defaultScale
-    };
-  }
-  get uri() {
-    return this._uri;
-  }
-  get file() {
-    return this._file;
-  }
-  set file(value) {
-    this._selectedHdu = value;
-  }
-  get options() {
-    return this._options;
-  }
-  set options(value) {
-    this._options = value;
-  }
-  get selectedHdu() {
-    return this._selectedHdu;
-  }
-  set selectedHdu(value) {
-    this._selectedHdu = value;
-  }
-  // Implement the open method to load the header
-  async open() {
-    this._file = await this.generateImageFromFits(this._uri.fsPath, this._options["colormap"], this._options["scale"]);
-    this._selectedHdu = 0;
-    for (const key in this._file) {
-      const element = this._file[key];
-      if (element["encoded_image"] !== false) {
-        this._selectedHdu = parseInt(key.replace("hdu", ""), 10);
-        break;
-      }
-    }
-  }
-  async generateImageFromFits(fitsFilePath, colormap, scale) {
-    return new Promise((resolve, reject) => {
-      const pythonInterpreterPath = vscode.workspace.getConfiguration("python").get("defaultInterpreterPath");
-      let command = "";
-      if (pythonInterpreterPath === void 0) {
-        command = osvar === "win32" ? "python" : "python3";
-      } else {
-        command = pythonInterpreterPath;
-      }
-      const activationCommand = "";
-      const pythonScriptPath = path.join(__dirname, "python", "generate_image.py");
-      const combinedCommand = `
-                ${activationCommand} > /dev/null 2>&1 &&
-                ${command} ${pythonScriptPath} "${fitsFilePath}" ${colormap} ${scale}
-            `;
-      const pythonProcess = (0, import_child_process.spawn)("bash", ["-c", combinedCommand]);
-      let result = "";
-      if (pythonProcess?.stdout && pythonProcess?.stderr) {
-        pythonProcess.stdout.on("data", (data) => {
-          result += data.toString();
-        });
-        pythonProcess.stderr.on("data", (data) => {
-          console.error(`Python stderr: ${data}`);
-          reject(new Error(`Failed to generate image from FITS file.`));
-        });
-        pythonProcess.on("exit", (code) => {
-          try {
-            const output = JSON.parse(result);
-            resolve(output);
-          } catch (error) {
-            console.error(`Failed to parse Python script output: ${error}`);
-            reject(new Error(`Failed to generate image from FITS file.`));
-          }
-        });
-      } else {
-        reject(new Error("Failed to start the Python process."));
-      }
-    });
-  }
-  dispose() {
-  }
-};
-function activate(context) {
-  const pythonInterpreterPath = vscode.workspace.getConfiguration("python").get("defaultInterpreterPath");
-  let command = "";
-  if (pythonInterpreterPath === void 0) {
-    command = osvar === "win32" ? "python" : "python3";
-  } else {
-    command = pythonInterpreterPath;
-  }
-  const activationCommand = "";
-  const combinedCommand = `
-        ${activationCommand} > /dev/null 2>&1 &&
-        ${command} -m pip install -r ${requirements}
-    `;
-  (0, import_child_process.spawn)("bash", ["-c", combinedCommand]);
-  context.subscriptions.push(
-    vscode.window.registerCustomEditorProvider(
-      "fitsimagevoy.fits",
-      new CustomEditorProvider(context),
-      {
-        webviewOptions: {
-          retainContextWhenHidden: true
-        }
-      }
-    )
-  );
-}
-function deactivate() {
-}
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  activate,
-  deactivate
-});
-//# sourceMappingURL=extension.js.map
+        </html>`;t.webview.html=x}async resolveCustomEditor(e,t,n){t.webview.options={enableScripts:!0},await e.open(),await this.setWebviewForDocument(e,t),t.webview.onDidReceiveMessage(async o=>{switch(o.command){case"hduSelectorChanged":e.selectedHdu=o.newSelectedHdu,await this.setWebviewForDocument(e,t);break;case"doneLoading":let a=JSON.stringify({file:e.file,selectedHdu:e.selectedHdu,options:e.options});await t.webview.postMessage({command:"updateHeaderInfo",data:a});break;case"colormapChanged":e.options.colormap=o.newColormap,await e.open(),t.webview.postMessage({command:"updateImage",data:JSON.stringify({file:e.file,selectedHdu:e.selectedHdu,options:e.options})});break;case"scaleChanged":e.options.scale=o.newScale,await e.open(),t.webview.postMessage({command:"updateImage",data:JSON.stringify({file:e.file,selectedHdu:e.selectedHdu,options:e.options})});break}},void 0)}saveCustomDocument(e,t){return Promise.resolve()}},y=class{_uri;_file;_options;_selectedHdu;constructor(e){this._uri=e;let t=s.workspace.getConfiguration("fitsimagevoy"),n=t.get("defaultColormap","viridis"),o=t.get("defaultScale","linear");this.options={colormap:n,scale:o}}get uri(){return this._uri}get file(){return this._file}set file(e){this._selectedHdu=e}get options(){return this._options}set options(e){this._options=e}get selectedHdu(){return this._selectedHdu}set selectedHdu(e){this._selectedHdu=e}async open(){this._file=await this.generateImageFromFits(this._uri.fsPath,this._options.colormap,this._options.scale),this._selectedHdu=0;for(let e in this._file)if(this._file[e].encoded_image!==!1){this._selectedHdu=parseInt(e.replace("hdu",""),10);break}}async generateImageFromFits(e,t,n){return new Promise((o,a)=>{let p=s.workspace.getConfiguration("python").get("defaultInterpreterPath"),c="";p===void 0?c=b==="win32"?"python":"python3":c=p;let m="",u=U.join(__dirname,"python","generate_image.py"),g=`
+                ${m} > /dev/null 2>&1 &&
+                ${c} ${u} "${e}" ${t} ${n}
+            `,d=(0,w.spawn)("bash",["-c",g]),h="";d?.stdout&&d?.stderr?(d.stdout.on("data",r=>{h+=r.toString()}),d.stderr.on("data",r=>{console.error(`Python stderr: ${r}`),a(new Error("Failed to generate image from FITS file."))}),d.on("exit",r=>{try{let l=JSON.parse(h);o(l)}catch(l){console.error(`Failed to parse Python script output: ${l}`),a(new Error("Failed to generate image from FITS file."))}})):a(new Error("Failed to start the Python process."))})}dispose(){}};function j(i){let e=s.workspace.getConfiguration("python").get("defaultInterpreterPath"),t="";e===void 0?t=b==="win32"?"python":"python3":t=e;let o=`
+         > /dev/null 2>&1 &&
+        ${t} -m pip install -r ${W}
+    `;(0,w.spawn)("bash",["-c",o]),i.subscriptions.push(s.window.registerCustomEditorProvider("fitsimagevoy.fits",new f(i),{webviewOptions:{retainContextWhenHidden:!0}}))}function O(){}0&&(module.exports={activate,deactivate});
