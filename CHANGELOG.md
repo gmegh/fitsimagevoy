@@ -4,8 +4,12 @@ All notable changes to the "fitsimagevoy" extension will be documented in this f
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.5] - 2024-01-25
 
-## [0.0.4] - 2024-01-117
+- Fixes some bugs with image previewer for certain xtensions. 
+- Introduces scrolling in selectable options.
+
+## [0.0.4] - 2024-01-17
 
 - Fixes python paths and pip installs.
 

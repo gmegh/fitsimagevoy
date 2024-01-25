@@ -31,12 +31,14 @@ FitsImageVOY is dedicated to the Rubin observatory scientists who will discover 
 
 ## Attribution
 
-FitsImageVOY makes use of the following libraries and tools:
+FitsImageVOY makes use of the following libraries, resources and tools:
 
 - [mpld3](https://mpld3.github.io/): A library for D3.js visualizations of Matplotlib plots.
 - [d3js](https://d3js.org/): A JavaScript library for producing dynamic, interactive data visualizations.
 - [Matplotlib](https://matplotlib.org/): A comprehensive library for creating static, animated, and interactive visualizations in Python.
 - [Astropy](https://www.astropy.org/): A community-developed library for astronomy in Python.
+- [Vera C. Rubin Observatroy EPO Team](https://rubinobservatory.org/education): A dedicated team that generously provided the FitsImageVOY logo.
+
 
 ## Next Steps
 
